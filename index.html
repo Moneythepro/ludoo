@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ludo PWA — Offline Pass‑and‑Play</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="description" content="Ludo game for 2–6 players. Works offline. Installable PWA.">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js');
+      });
+    }
+  </script>
+</head>
+<body>
+  <header class="appbar">
+    <div class="brand">
+      <span class="logo">🎲</span>
+      <strong>Ludo</strong><span class="muted">&nbsp;•&nbsp;PWA</span>
+    </div>
+    <div class="actions">
+      <button id="btnNew" class="btn">New Game</button>
+      <button id="btnInstall" class="btn outline">Install</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel">
+      <section class="card settings">
+        <h2>Setup</h2>
+        <label>Players
+          <select id="playerCount">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4" selected>4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+        </label>
+        <label>Tokens per Player
+          <select id="tokensPerPlayer">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4" selected>4</option>
+          </select>
+        </label>
+        <button id="btnStart" class="btn primary block">Start</button>
+      </section>
+
+      <section class="card status">
+        <h2>Status</h2>
+        <div id="turnInfo" class="turn">—</div>
+        <div class="diceRow">
+          <button id="btnRoll" class="btn dice">Roll 🎲</button>
+          <div id="diceValue" class="die">—</div>
+        </div>
+        <div id="log" class="log"></div>
+      </section>
+    </aside>
+
+    <section class="boardWrap">
+      <!-- SVG-based board: a circular track of 52 cells + home rows -->
+      <svg id="board" viewBox="0 0 1000 1000" class="board" xmlns="http://www.w3.org/2000/svg" aria-label="Ludo Board">
+        <defs>
+          <g id="cell">
+            <circle r="16" stroke="#0b1220" stroke-width="3" fill="#0f172a" />
+          </g>
+          <g id="homeCell">
+            <rect x="-16" y="-16" width="32" height="32" rx="6" stroke="#0b1220" stroke-width="3" fill="#0f172a"/>
+          </g>
+          <g id="token">
+            <circle r="14" stroke="#0b1220" stroke-width="3" fill="white"/>
+          </g>
+          <filter id="shadow">
+            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/>
+          </filter>
+        </defs>
+        <!-- Track cells will be injected by JS -->
+        <g id="cells" filter="url(#shadow)"></g>
+        <g id="safeMarkers"></g>
+        <g id="tokens"></g>
+      </svg>
+      <div class="help">
+        Tap <span class="kbd">🎲 Roll</span>, then tap a highlighted token to move. Captures send tokens back to base.
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a href="https://github.com/" target="_blank" rel="noreferrer">Fork on GitHub</a>
+    <span>•</span>
+    <span>Works offline</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
