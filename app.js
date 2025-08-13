@@ -57,37 +57,17 @@ function genHomeRows(track){
 const track = genTrack();
 const {rows: HOME_ROWS, enters: ENTER_INDEX} = genHomeRows(track);
 
-function drawBoard(){
-  const g = $('#cells');
-  const safe = $('#safeMarkers');
-  g.innerHTML = '';
-  safe.innerHTML='';
-  track.forEach((pt, i)=>{
-    const use = document.createElementNS('http://www.w3.org/2000/svg','use');
-    use.setAttributeNS('http://www.w3.org/1999/xlink','href','#cell');
-    use.setAttribute('transform',`translate(${pt.x},${pt.y})`);
-    g.appendChild(use);
-  });
-  // Draw home rows
-  HOME_ROWS.forEach(row=>{
-    row.forEach(pt=>{
-      const use = document.createElementNS('http://www.w3.org/2000/svg','use');
-      use.setAttributeNS('http://www.w3.org/1999/xlink','href','#homeCell');
-      use.setAttribute('transform',`translate(${pt.x},${pt.y})`);
-      g.appendChild(use);
-    })
-  });
-  // Mark safe cells (each player's start positions)
-  const startIdx = [0, 8, 17, 26, 34, 43]; // 6 roughly even starts
-  startIdx.forEach(i=>{
-    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    c.setAttribute('cx', track[i].x);
-    c.setAttribute('cy', track[i].y);
-    c.setAttribute('r', 8);
-    c.setAttribute('fill', '#10b981');
-    c.setAttribute('opacity','0.8');
-    $('#safeMarkers').appendChild(c);
-  })
+function drawBoard() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+
+  // 15×15 = 225 cells
+  for (let i = 0; i < 225; i++) {
+    const cell = document.createElement('div');
+    cell.classList.add('cell');
+    // You can style cells with nth-child in CSS to create colored zones
+    board.appendChild(cell);
+  }
 }
 
 function randInt(n){ return Math.floor(Math.random()*n); }
