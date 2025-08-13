@@ -147,3 +147,33 @@ select{ background:transparent; border:1px solid var(--outline); color:var(--tex
 .cell.home-yellow .token {
   margin: auto;
 }
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+  gap: 1px;
+  background: #222;
+  width: 90vmin;
+  height: 90vmin;
+  margin: auto;
+}
+
+#board .cell {
+  background: #fff;
+  aspect-ratio: 1;
+}
+
+#board .token {
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  margin: auto;
+}
+
+.token.p1 { background: red; }
+.token.p2 { background: green; }
+.token.p3 { background: blue; }
+.token.p4 { background: yellow; }
+.token.p5 { background: purple; }
+.token.p6 { background: teal; }
