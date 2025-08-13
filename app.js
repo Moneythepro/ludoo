@@ -297,47 +297,39 @@ function onTokenClick(e){
   if (state.winner===null) nextPlayer();
 }
 
-function render(){
-  drawBoardIfNeeded();
-  // Render tokens
-  const g = $('#tokens');
-  g.innerHTML = '';
-  for (let p=0;p<state.players;p++){
-    for (let ti=0; ti<state.pieces[p].length; ti++){
+function render() {
+  drawBoard();
+
+  // Remove existing tokens
+  document.querySelectorAll('.token').forEach(t => t.remove());
+
+  for (let p = 0; p < state.players; p++) {
+    for (let ti = 0; ti < state.pieces[p].length; ti++) {
       const t = state.pieces[p][ti];
-      let x=0, y=0;
-      if (t.posType==='base'){
-        const base = HOME_BASES[p][ti];
-        x=base.x; y=base.y;
-      } else if (t.posType==='track'){
-        const pt = track[t.trackIndex];
-        // offset stacks slightly
-        const offx = (ti%2)*8 - 4;
-        const offy = (Math.floor(ti/2))*8 - 4;
-        x=pt.x+offx; y=pt.y+offy;
-      } else if (t.posType==='homeRow'){
-        const pt = HOME_ROWS[p][t.homeIndex];
-        x=pt.x; y=pt.y;
-      } else if (t.posType==='home'){
-        // place neatly in the inner circle for winners
-        const center = {x:500, y:500};
-        const angle = (p/state.players)*Math.PI*2 + (ti*0.25);
-        x = center.x + 40*Math.cos(angle);
-        y = center.y + 40*Math.sin(angle);
+      if (t.posType === 'base') continue; // not on board yet
+
+      let cellIndex = null;
+
+      if (t.posType === 'track') {
+        cellIndex = t.trackIndex; // Map track index to cell number
+      } else if (t.posType === 'homeRow') {
+        cellIndex = homeRowToCellIndex(p, t.homeIndex);
       }
-      const use = document.createElementNS('http://www.w3.org/2000/svg','use');
-      use.setAttributeNS('http://www.w3.org/1999/xlink','href','#token');
-      use.setAttribute('transform',`translate(${x},${y})`);
-      use.classList.add('token', COLORS[p]);
-      use.classList.add(`p${p+1}`);
-      use.setAttribute('data-p', String(p));
-      use.setAttribute('data-ti', String(ti));
-      // highlight if movable
-      if (state.rolled!==null && legalMove(p, ti, state.rolled)){
-        use.classList.add('canMove');
+
+      if (cellIndex !== null) {
+        const cell = document.querySelector(`#board .cell:nth-child(${cellIndex + 1})`);
+        if (cell) {
+          const token = document.createElement('div');
+          token.classList.add('token', COLORS[p]);
+          token.dataset.p = p;
+          token.dataset.ti = ti;
+          if (state.rolled !== null && legalMove(p, ti, state.rolled)) {
+            token.classList.add('canMove');
+            token.addEventListener('click', onTokenClick);
+          }
+          cell.appendChild(token);
+        }
       }
-      use.addEventListener('click', onTokenClick);
-      $('#tokens').appendChild(use);
     }
   }
 }
