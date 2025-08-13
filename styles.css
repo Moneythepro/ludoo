@@ -177,3 +177,28 @@ select{ background:transparent; border:1px solid var(--outline); color:var(--tex
 .token.p4 { background: yellow; }
 .token.p5 { background: purple; }
 .token.p6 { background: teal; }
+
+.cell {
+  border: 1px solid #000;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.red-home { background: red; }
+.green-home { background: green; }
+.yellow-home { background: yellow; }
+.blue-home { background: blue; }
+.track { background: white; }
+.safe { background: lightgray; }
+.center-star {
+  background: white;
+  position: relative;
+}
+.center-star::after {
+  content: "★";
+  color: black;
+  font-size: 1.5em;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
