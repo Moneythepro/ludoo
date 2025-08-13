@@ -60,13 +60,38 @@ const {rows: HOME_ROWS, enters: ENTER_INDEX} = genHomeRows(track);
 function drawBoard() {
   const board = document.getElementById('board');
   board.innerHTML = '';
+  board.style.display = 'grid';
+  board.style.gridTemplateColumns = 'repeat(15, 1fr)';
 
-  // 15×15 = 225 cells
-  for (let i = 0; i < 225; i++) {
-    const cell = document.createElement('div');
-    cell.classList.add('cell');
-    // You can style cells with nth-child in CSS to create colored zones
-    board.appendChild(cell);
+  for (let r = 0; r < 15; r++) {
+    for (let c = 0; c < 15; c++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+
+      // Red home
+      if (r < 6 && c < 6) cell.classList.add('red-home');
+      // Green home
+      else if (r < 6 && c > 8) cell.classList.add('green-home');
+      // Yellow home
+      else if (r > 8 && c < 6) cell.classList.add('yellow-home');
+      // Blue home
+      else if (r > 8 && c > 8) cell.classList.add('blue-home');
+      // Center star
+      else if (r >= 6 && r <= 8 && c >= 6 && c <= 8) cell.classList.add('center-star');
+      // Safe cells (example positions)
+      else if (
+        (r === 1 && c === 6) || (r === 8 && c === 1) ||
+        (r === 6 && c === 13) || (r === 13 && c === 8)
+      ) {
+        cell.classList.add('safe');
+      }
+      // Track cells
+      else {
+        cell.classList.add('track');
+      }
+
+      board.appendChild(cell);
+    }
   }
 }
 
