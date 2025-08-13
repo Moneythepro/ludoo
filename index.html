@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Ludo PWA — Offline Pass‑and‑Play</title>
+  <title>Ludo PWA — Offline Pass-and-Play</title>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0f172a">
   <link rel="icon" href="icons/icon-192.png">
@@ -11,7 +11,6 @@
   <meta name="description" content="Ludo game for 2–6 players. Works offline. Installable PWA.">
   <link rel="stylesheet" href="styles.css">
   <script>
-    // Register Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js');
@@ -67,27 +66,14 @@
     </aside>
 
     <section class="boardWrap">
-      <!-- SVG-based board: a circular track of 52 cells + home rows -->
-      <svg id="board" viewBox="0 0 1000 1000" class="board" xmlns="http://www.w3.org/2000/svg" aria-label="Ludo Board">
-        <defs>
-          <g id="cell">
-            <circle r="16" stroke="#0b1220" stroke-width="3" fill="#0f172a" />
-          </g>
-          <g id="homeCell">
-            <rect x="-16" y="-16" width="32" height="32" rx="6" stroke="#0b1220" stroke-width="3" fill="#0f172a"/>
-          </g>
-          <g id="token">
-            <circle r="14" stroke="#0b1220" stroke-width="3" fill="white"/>
-          </g>
-          <filter id="shadow">
-            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/>
-          </filter>
-        </defs>
-        <!-- Track cells will be injected by JS -->
-        <g id="cells" filter="url(#shadow)"></g>
-        <g id="safeMarkers"></g>
-        <g id="tokens"></g>
-      </svg>
+      <!-- Ludo King–style 15×15 HTML board -->
+      <div id="board" class="ludo-board">
+        <!-- Generate 225 cells -->
+        <!-- These will be styled via CSS nth-child to form the colored zones & paths -->
+        <!-- Each cell is empty div, logic will place tokens dynamically -->
+        ${Array.from({ length: 225 }, () => '<div></div>').join('')}
+      </div>
+
       <div class="help">
         Tap <span class="kbd">🎲 Roll</span>, then tap a highlighted token to move. Captures send tokens back to base.
       </div>
